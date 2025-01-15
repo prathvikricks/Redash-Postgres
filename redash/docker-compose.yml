@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  server:
+    image: redash/redash:latest
+    container_name: redash_server
+    command: server
+    depends_on:
+      - postgres_redash
+      - redis
+    ports:
+      - "5000:5000"
+    environment:
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://redash:redashpassword@postgres_redash:5432/redash"
+      PYTHONUNBUFFERED: 0
+    networks:
+      - redash-network
+
+  worker:
+    image: redash/redash:latest
+    container_name: redash_worker
+    command: scheduler
+    depends_on:
+      - server
+    environment:
+      REDASH_LOG_LEVEL: "INFO"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_DATABASE_URL: "postgresql://redash:redashpassword@postgres_redash:5432/redash"
+      PYTHONUNBUFFERED: 0
+    networks:
+      - redash-network
+
+  redis:
+    image: redis:6-alpine
+    container_name: redash_redis
+    restart: unless-stopped
+    networks:
+      - redash-network
+
+  postgres_redash:
+    image: postgres:15
+    container_name: postgres_redash
+    environment:
+      POSTGRES_USER: redash
+      POSTGRES_PASSWORD: redashpassword
+      POSTGRES_DB: redash
+    volumes:
+      - redash_postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - redash-network
+
+volumes:
+  redash_postgres_data:
+
+networks:
+  redash-network:
+    name: redash-network
