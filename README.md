@@ -14,7 +14,7 @@ host    mydb    redash    0.0.0.0/0    md5
 ### postgresql.conf file for Main postgres which makes postgres to listen to every IP again
 This is used to enable postgres listening to any IP.
 ```yaml
-host    mydb    redash    0.0.0.0/0    md5
+listen_addresses = '*'
 ```
 
 ## PostgreSQL Setup
