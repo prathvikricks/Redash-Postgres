@@ -10,6 +10,9 @@ services:
       - redis
     ports:
       - "5000:5000"
+    volumes:
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+      - redash_postgres_data:/var/lib/postgresql/data
     environment:
       REDASH_LOG_LEVEL: "INFO"
       REDASH_REDIS_URL: "redis://redis:6379/0"
@@ -47,6 +50,7 @@ services:
       POSTGRES_PASSWORD: redashpassword
       POSTGRES_DB: redash
     volumes:
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
       - redash_postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
