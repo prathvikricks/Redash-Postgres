@@ -8,7 +8,7 @@ This document outlines the step-by-step process of setting up PostgreSQL 15 and 
 ### pg_hub.conf file for Main postgres
 This is used to enable postgres to listen user named redash and listening to any IP.
 ```yaml
-
+host    mydb    redash    0.0.0.0/0    md5
 ```
 
 ## PostgreSQL Setup
