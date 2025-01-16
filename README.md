@@ -5,6 +5,12 @@ This document outlines the step-by-step process of setting up PostgreSQL 15 and 
 
 ---
 
+### pg_hub.conf file for Main postgres
+This is used to enable postgres to listen user named redash and listening to any IP.
+```yaml
+
+```
+
 ## PostgreSQL Setup
 ### Docker Compose File for PostgreSQL
 ```yaml
@@ -21,6 +27,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
@@ -28,6 +35,7 @@ services:
 
 volumes:
   postgres_data:
+
 
 networks:
   redash-network:
